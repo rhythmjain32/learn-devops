@@ -7,7 +7,7 @@ export let notes = [];
 function PopUp({ togglePopup }) {
     const [title, setTitle] = useState("");
     const [details, setDetails] = useState("");
-    const apiUrl = "http://localhost:5000";
+    const apiUrl = "http://65.0.109.23:5000";
 
     const saveNote = () => {
         if (title.trim() !== '' && details.trim() !== '') {
