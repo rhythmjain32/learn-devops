@@ -9,7 +9,7 @@ function App() {
     const [showPopup, setShowPopup] = useState(false);
     const [showSlide, setShowSlide] = useState(false);
     const [selectedNote, setSelectedNote] = useState(null);
-    const apiUrl = "http://localhost:2029"; // Your API base URL
+    const apiUrl = "http://localhost:5000"; // Your API base URL
 
     // Fetch notes when the component mounts
     useEffect(() => {
@@ -55,21 +55,21 @@ function App() {
             <div className="container">
                 <header className="head">
                     <h1 className="scribble">Scribble</h1>
-                    <button className="addItem" onClick={togglePopup}>
+                    <button className="addItem" onClick={ togglePopup }>
                         create
                     </button>
-                    {showPopup && <PopUp togglePopup={togglePopup} addNote={addNote} />} {/* Pass addNote to PopUp */}
+                    { showPopup && <PopUp togglePopup={ togglePopup } addNote={ addNote } /> } {/* Pass addNote to PopUp */ }
                 </header>
-                {showSlide && (
+                { showSlide && (
                     <Slide
-                        toggleSlide={toggleSlide}
-                        note={selectedNote}
-                        updateNote={updateNote}
-                        deleteNote={deleteNote}
+                        toggleSlide={ toggleSlide }
+                        note={ selectedNote }
+                        updateNote={ updateNote }
+                        deleteNote={ deleteNote }
                     />
-                )}
+                ) }
             </div>
-            <Notes notes={notes} toggleSlide={toggleSlide} />
+            <Notes notes={ notes } toggleSlide={ toggleSlide } />
         </>
     );
 }

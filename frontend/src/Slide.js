@@ -2,15 +2,15 @@ import './Slide.css'
 import { notes } from './PopUp';
 import { useState } from 'react';
 
-function Slide({ toggleSlide, note, deleteNote }){
-    const [ noteID, setNoteId ] = useState(-1);
+function Slide({ toggleSlide, note, deleteNote }) {
+    const [noteID, setNoteId] = useState(-1);
 
-    const [updateTitle, setUpdateTitle ] = useState("");
-    const [updateDetails, setUpdateDetails ] = useState("");
+    const [updateTitle, setUpdateTitle] = useState("");
+    const [updateDetails, setUpdateDetails] = useState("");
     const [title, setTitle] = useState("");
-    
+
     const [details, setDetails] = useState("");
-    const apiUrl = "http://localhost:2029";
+    const apiUrl = "http://localhost:5000";
 
     const handleUpdate = (item) => {
         setNoteId(item._id);
@@ -20,7 +20,7 @@ function Slide({ toggleSlide, note, deleteNote }){
 
     const updateNote = () => {
         if (updateTitle.trim() !== '' && updateDetails.trim() !== '') {
-            fetch(apiUrl + "/home/"+noteID, {
+            fetch(apiUrl + "/home/" + noteID, {
                 method: "PUT",
                 headers: {
                     'Content-Type': 'application/json'
@@ -30,10 +30,10 @@ function Slide({ toggleSlide, note, deleteNote }){
                 if (res.ok) {
 
                     const updatedNotes = notes.map((item) => {
-                        if(item._id === noteID){
+                        if (item._id === noteID) {
                             item.title = updateTitle;
                             item.details = updateDetails;
-                        } 
+                        }
                         return item;
                     })
 
@@ -77,54 +77,54 @@ function Slide({ toggleSlide, note, deleteNote }){
     };
 
     const copy = (item) => {
-        if(item.details.trim() !== ""){
+        if (item.details.trim() !== "") {
             let copiedText = item.details;
             navigator.clipboard.writeText(copiedText);
             alert("Text Copied !")
-        } else{
+        } else {
             alert("Text not Copied")
         }
     }
 
     return (
         <main className='sildeBackground'>
-            {            
+            {
                 note && (
-                    <section className='popupSlide' key={note._id}>
-                    <header className='popup-head'>
+                    <section className='popupSlide' key={ note._id }>
+                        <header className='popup-head'>
+                            {
+                                noteID === -1 || noteID !== note._id ?
+                                    <>
+                                        <h6 className='back' onClick={ toggleSlide }>back</h6>
+                                    </> :
+                                    <>
+                                        <h6 className='back' onClick={ toggleSlide }>cancel</h6>
+                                    </>
+                            }
+                            {
+                                noteID === -1 || noteID !== note._id ?
+                                    <>
+                                        <h6 className='edit' disabled onClick={ () => handleUpdate(note) }>edit</h6>
+                                    </> :
+                                    <>
+                                        <h6 className='save' onClick={ updateNote } >update</h6>
+                                    </>
+                            }
+                        </header>
                         {
                             noteID === -1 || noteID !== note._id ?
-                            <>
-                                <h6 className='back' onClick={toggleSlide}>back</h6>
-                            </> :
-                            <>
-                                <h6 className='back' onClick={toggleSlide}>cancel</h6>
-                            </>
+                                <section className='input-holder'>
+                                    <input className='input-head' value={ note.title } readOnly></input>
+                                    <textarea className='input-box' value={ note.details } readOnly></textarea>
+                                </section> :
+                                <section className='input-holder'>
+                                    <input type='text' placeholder='Title' onChange={ (e) => setUpdateTitle(e.target.value) } className='input-head' value={ updateTitle } />
+                                    <textarea type='text' placeholder='Notes goes to here...' onChange={ (e) => setUpdateDetails(e.target.value) } className='input-box' value={ updateDetails }></textarea>
+                                </section>
                         }
-                        {
-                            noteID === -1 || noteID !== note._id ? 
-                            <>
-                                <h6 className='edit' disabled onClick={() => handleUpdate(note)}>edit</h6>
-                            </> :
-                            <>
-                                <h6 className='save' onClick={updateNote} >update</h6>
-                            </>
-                        }
-                    </header>
-                    {
-                        noteID === -1 || noteID !== note._id ? 
-                            <section className='input-holder'>
-                                <input className='input-head' value={note.title} readOnly></input>
-                                <textarea className='input-box' value={note.details} readOnly></textarea>
-                            </section> :
-                            <section className='input-holder'>
-                                <input type='text' placeholder='Title' onChange={(e) => setUpdateTitle(e.target.value)} className='input-head' value={updateTitle} />
-                                <textarea type='text' placeholder='Notes goes to here...' onChange={(e) => setUpdateDetails(e.target.value)} className='input-box' value={updateDetails}></textarea>
-                            </section>
-                    }
                         <article className='add-ons'>
-                            <button className='bold' onClick={() => copy(note)}>Copy</button>
-                            <button className='bold' onClick={() => handleDelete(note)} >Delete</button>
+                            <button className='bold' onClick={ () => copy(note) }>Copy</button>
+                            <button className='bold' onClick={ () => handleDelete(note) } >Delete</button>
                         </article>
                     </section>
                 )
