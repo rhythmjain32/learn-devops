@@ -11,12 +11,12 @@ let notes = [];
 // connecting Database
 
 mongoose.connect('mongodb://localhost:27017/scribble')
-.then(() => {
-    console.log('Database Connected');
-})
-.catch((err) => {
-    console.log(err)
-})
+    .then(() => {
+        console.log('Database Connected');
+    })
+    .catch((err) => {
+        console.log(err)
+    })
 
 // creating scheme to allign the data properly
 
@@ -32,15 +32,15 @@ const noteSchema = new mongoose.Schema({
 
 const noteModel = mongoose.model('note', noteSchema);
 
-app.post('/home', async(req, res) => {
+app.post('/home', async (req, res) => {
     const { title, details } = req.body;
     try {
-        const newNote = new noteModel({title, details});
+        const newNote = new noteModel({ title, details });
         await newNote.save();
         res.status(201).json(newNote);
     } catch (error) {
         console.log(error);
-        res.status(500).json({message: error.message});
+        res.status(500).json({ message: error.message });
     }
 });
 
@@ -53,15 +53,15 @@ app.put('/home/:id', async (req, res) => {
             { title, details },
             { new: true }
         )
-    
-        if(!updatedNote){
-            return res.status(404).json({message: "note not Found"});
+
+        if (!updatedNote) {
+            return res.status(404).json({ message: "note not Found" });
         }
-    
+
         res.json(updatedNote);
     } catch (error) {
         console.log(error);
-        res.status(500).json({message: error.message});
+        res.status(500).json({ message: error.message });
     }
 })
 
@@ -70,7 +70,7 @@ app.get('/home', async (req, res) => {
         const notes = await noteModel.find();
         res.json(notes);
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({ message: error.message });
     }
 })
 
@@ -78,7 +78,7 @@ app.delete('/home/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const deletedNote = await noteModel.findByIdAndDelete(id);
-        
+
         if (!deletedNote) {
             return res.status(404).json({ message: "Note not found" });
         }
@@ -92,7 +92,7 @@ app.delete('/home/:id', async (req, res) => {
 
 
 
-const PORT = 2029;
+const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
